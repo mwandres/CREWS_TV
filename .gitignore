@@ -127,7 +127,20 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-operational_TV_v1/
+test/
+operational_TV_v1/archives/
+operational_TV_v1/extras/TPXO8/
+operational_TV_v1/Hall_Reports/
+operational_TV_v1/Regional_Output/
+operational_TV_v1/Regional_tmp/
+operational_TV_v1/runs/
+operational_TV_v1/Test_Reports/
+operational_TV_v1/tmp/
+operational_TV_v1/Funafuti_lagoon/Data/
+operational_TV_v1/inundation/RBF/Funafuti_forecast/
+operational_TV_v1/codes/
+
+
 
 # Spyder project settings
 .spyderproject
