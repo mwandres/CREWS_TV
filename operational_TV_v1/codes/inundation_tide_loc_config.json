@@ -1,0 +1,8 @@
+[
+    {
+        "Tailored_Forecast":{
+            "forecast_locations_path":"../extras/Tuvalu_island_gauge_locations.csv"
+        }
+        
+    }
+]

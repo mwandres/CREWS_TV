@@ -1,0 +1,13 @@
+[
+    {
+        "Tailored_Forecast":{
+            "output_directory":"../Test_Reports",
+            "forecast_locations_path":"../extras/Test_output_pts.csv",
+            "mail_subject": "Tailored Test Forecast TV",
+            "location_of_small_map_png":"../extras/locations/",
+            "mail_body": "Talofa! <br/><br/> Kindly attaching <span style='background-color:#51b73b; color:#FFF; font-weight:bold;'> &nbsp; &nbsp;High-Resolution &nbsp; &nbsp;</span> wave forecast for locations around Tuvalu. <br/><br/> <i>*** This is an automatically generated email, please do not reply ...</i><br/>Tuvalu Met Service",
+            "receipients":["divesha@spc.int","moritzw@spc.int"]
+        }
+        
+    }
+]

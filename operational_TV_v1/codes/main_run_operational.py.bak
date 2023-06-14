@@ -1,0 +1,175 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 12 18:16:18 2021
+
+@author: antonioh
+"""
+
+import datetime as dt
+from datetime import timedelta
+import os
+import shutil
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+from bs4 import BeautifulSoup
+import sys
+sys.path.insert(1, 'D:\CREWS_TV\operational_TV_v1\codes')
+import step1_download_NCEP as step1
+import step2_download_CMEMS as step2
+import step3_gen_tide_TPOX8 as step3
+import step4_make_wave_forcing as step4
+import step5_make_wind_forcing as step5
+import step6_parallelize_run as step6
+import step7_postprocess_output as step7
+#import step8_multiprocessing_flood_risk as step8
+import step9_archive_output as step9
+import step10_ingest2GUI as step10
+
+###### Inundation codes ############
+
+import multiprocessing as mp
+sys.path.insert(1, 'D:\CREWS_TV\operational_TV_v1\inundation')
+import Inundation_Forecast_Niutao as step8_Niutao
+import Inundation_Forecast_Niulakita as step8_Niulakita
+import Inundation_Forecast_Nanumaga as step8_Nanumaga
+import Inundation_Forecast_Nanumea as step8_Nanumea
+import Inundation_Forecast_Funafuti as step8_Funafuti
+import Inundation_Forecast_Nukufetau as step8_Nukufetau
+import Inundation_Forecast_Nui as step8_Nui
+import Inundation_Forecast_Nukulaelae as step8_Nukulaelae
+import Inundation_Forecast_Vaitupu as step8_Vaitupu
+
+lagoon_path=r'D:\CREWS_TV\operational_TV_v1\Funafuti_lagoon'
+sys.path.insert(1, lagoon_path)
+from reconstruct_forecast import make_lagoon_forecast as step8_Fun_lagoon
+#####################################
+
+
+def list_available_runs(url):
+    session = requests.Session()
+    retry = Retry(connect=5, backoff_factor=1)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount(url, adapter)
+
+    try:
+        req = session.get(url).text
+        session.close() 
+        soup = BeautifulSoup(req, 'html.parser')     
+        x = (soup.find_all('a'))
+        runs = []
+        for i in x:
+            file_name = i.extract().get_text()
+            runs.append(int(file_name))
+    except:
+        
+        runs = []
+        print('Keep working on making the dowinloading process more robust')
+        
+      
+    return(runs)
+
+
+
+def delete_ndaysbefore(now,ndays):
+    folder_name='D:/CREWS_TV/operational_TV_v1/runs/'
+    flist = os.listdir(folder_name)
+    for d in flist:
+        rundate=dt.datetime.strptime(d+'0000',"%Y%m%d%H%M%S")
+        if rundate<now-timedelta(ndays):
+            shutil.rmtree('D:/CREWS_TV/operational_TV_v1/runs/'+ d)
+    return()
+
+def delete_nmonthsbefore(now,nmonths):
+    folder_name='D:/CREWS_TV/operational_TV_v1/archives/'
+    flist = os.listdir(folder_name)
+    for d in flist:
+        nb = d.split("_")[0]
+        rundate=dt.datetime.strptime(nb+'0000',"%Y%m%d%H%M%S")
+        if rundate<now-timedelta(nmonths * 30):
+            shutil.rmtree('D:/CREWS_TV/operational_TV_v1/archives/'+ d)
+    return()
+            
+    
+
+###############################################################################
+if __name__ == "__main__":
+    
+    
+    #- Find the latest available run in nomads.ncep.noaa.gov
+    now = dt.datetime.utcnow()
+    url = 'https://nomads.ncep.noaa.gov/cgi-bin/filter_gfswave.pl?dir=%2Fgfs.' + now.strftime("%Y") + now.strftime("%m") + now.strftime("%d")
+    runs = list_available_runs(url)
+    if len(runs)==0:
+        now = dt.datetime.utcnow()-timedelta(1)
+        url = 'https://nomads.ncep.noaa.gov/cgi-bin/filter_gfswave.pl?dir=%2Fgfs.' + now.strftime("%Y") + now.strftime("%m") + now.strftime("%d")
+        runs = list_available_runs(url)
+    
+    #- Define the run to be used
+    runs=sorted(runs)
+    #now = now.replace(hour=runs[-1],minute=0,second=0,microsecond=0)
+    now = dt.datetime(2022,7,12,0)
+    
+    
+    # delete previous runs older than 14 days
+    try:
+        delete_ndaysbefore(now,14)
+    except Exception as e:
+        print(e)
+        
+    
+    step1.download_NCEP(now)
+    step2.download_CNEMS(now)
+    step3.gen_tide(now)
+    step4.make_waves(now)
+    step5.make_winds(now)
+    step6.par_run(now)
+    step7.postprocess_SWAN(now,1)
+
+    #step 8 making flood risk using multiprocessing
+    # creating processes
+    mp.freeze_support()
+    p1 = mp.Process(target=step8_Niutao.inundation_forecast, args = (now,))
+    p2 = mp.Process(target=step8_Niulakita.inundation_forecast, args = (now,))
+    p3 = mp.Process(target=step8_Nanumaga.inundation_forecast, args = (now,))
+    p4 = mp.Process(target=step8_Nanumea.inundation_forecast, args = (now,))
+    p5 = mp.Process(target=step8_Funafuti.inundation_forecast, args = (now,))
+    p6 = mp.Process(target=step8_Nukufetau.inundation_forecast, args = (now,))
+    p7 = mp.Process(target=step8_Nukulaelae.inundation_forecast, args = (now,))
+    p8 = mp.Process(target=step8_Nui.inundation_forecast, args = (now,))
+    p9 = mp.Process(target=step8_Vaitupu.inundation_forecast, args = (now,))
+    p10 = mp.Process(target=step8_Fun_lagoon, args = (now,lagoon_path,))
+
+    # starting processes
+    p1.start()
+    p2.start()
+    p3.start()
+    p4.start()
+    p5.start()
+    p6.start()
+    p7.start()
+    p8.start()
+    p9.start()
+    p10.start()
+
+    # wait until processes are finished
+    p1.join()
+    p2.join()
+    p3.join()
+    p4.join()
+    p5.join()
+    p6.join()
+    p7.join()
+    p8.join()
+    p9.join()
+    p10.join()
+
+    # delete previous archived swan outputs older than 3 months
+    try:
+        delete_nmonthsbefore(now,3)
+    except Exception as e:
+        print(e)
+        
+    step9.archive_output(now)
+    step10.ingest2GUI(now)
+
