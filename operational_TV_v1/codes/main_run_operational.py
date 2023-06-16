@@ -3,6 +3,7 @@
 Created on Sat Jun 12 18:16:18 2021
 
 @author: moritzw
+This is the main script to run the forecast
 """
 
 import datetime as dt
