@@ -102,7 +102,7 @@ def plotter_msl(ax2, time_step, bottomlabel,labelleftt, havebar,fig,wnd_nc):
 figsize = cm2inch((21,29.7))
 
 def msl_plots(factor, wnd_nc):
-    fig, ax = plt.subplots(figsize=figsize, dpi=150)
+    fig, ax = plt.subplots(figsize=figsize, dpi=100)
     ax.axis('off')
     ax.text(0.01, 1.09,"Regional MSLP Maps", transform=ax.transAxes,fontsize=8, verticalalignment='top', color='#2F5F8A')
     #SECOND SET
