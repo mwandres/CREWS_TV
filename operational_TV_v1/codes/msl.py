@@ -110,16 +110,16 @@ def msl_plots(factor, wnd_nc):
     ax5 = plotter_msl(ax5, 0, False, True,False,fig,wnd_nc)
     ax6 = fig.add_axes([0.37, 0.845, 0.30, 0.20])
     ax6 = plotter_msl(ax6, 2, False, False,False,fig,wnd_nc)
-    ax7 = fig.add_axes([0.68, 0.845, 0.30, 0.20])
+    ax7 = fig.add_axes([0.69, 0.845, 0.35, 0.20])
     ax7 = plotter_msl(ax7, 4, False, False,True,fig,wnd_nc)
 
     #THIRD SET
     ax8 = fig.add_axes([0.06, 0.625, 0.30, 0.20])
     ax8 = plotter_msl(ax8, 6, False, True,False,fig,wnd_nc)
     ax9 = fig.add_axes([0.37, 0.625, 0.30, 0.20])
-    ax9 = plotter_msl(ax9, 8, False, False,False,fig,wnd_nc)
-    ax10 = fig.add_axes([0.68, 0.625, 0.30, 0.20])
-    ax10 = plotter_msl(ax10, 10, False, False,True,fig,wnd_nc)
+    ax9 = plotter_msl(ax9, 8, True, False,False,fig,wnd_nc)
+    ax10 = fig.add_axes([0.69, 0.625, 0.35, 0.20])
+    ax10 = plotter_msl(ax10, 10, True, False,True,fig,wnd_nc)
 
     #LAST SET
     ax11 = fig.add_axes([0.06, 0.405, 0.375, 0.20])
