@@ -5,9 +5,6 @@ from maileroffice import send_email_to_developer
 import glob
 import time
 
-#path_to_check = ['../Hall_Reports/','../x_reports/']
-path_to_check = ['../Hall_Reports/']
-hours_to_check = 48
 
 def get_information(directory):
     file_list = []
@@ -15,6 +12,16 @@ def get_information(directory):
         a = os.stat(os.path.join(directory,i))
         file_list.append([i,time.ctime(a.st_atime),time.ctime(a.st_ctime)]) #[file,most_recent_access,created]
     return file_list
+
+###
+f = open('./checker_config.json')
+path_to_check = ['../Hall_Reports/']
+###
+data = json.load(f)
+mail_subject = data[0]['Tailored_Forecast']['mail_subject']
+mail_body = data[0]['Tailored_Forecast']['mail_body']
+receipients = data[0]['Tailored_Forecast']['receipients']
+hours_to_check = 48
 
 for x in path_to_check:
     dir_list = get_information(x)
@@ -33,4 +40,4 @@ for x in path_to_check:
     print(hour_diff)
     if abs(hour_diff) > hours_to_check:
         print('send Email to developers!')
-        send_email_to_developer(['divesha@spc.int','moritzw@spc.int'], 'CREWS:Error', 'Bula! <br/><br/>There is some error with operational CREWS TV SPC machine.<br/>Please check!!!')
+        send_email_to_developer(receipients,mail_subject,mail_body)
