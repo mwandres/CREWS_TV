@@ -31,6 +31,6 @@ for x in path_to_check:
     diff = datetime.now()-datetime_object
     hour_diff = diff.total_seconds()/3600
     print(hour_diff)
-   # if abs(hour_diff) > hours_to_check:
-   #     print('send Email to developers!')
-   #     send_email_to_developer(['divesha@spc.int','moritzw@spc.int'], 'CREWS:Error', 'Bula! <br/><br/>There is some error with operational CREWS TV SPC machine.<br/>Please check!!!')
+    if abs(hour_diff) > hours_to_check:
+        print('send Email to developers!')
+        send_email_to_developer(['divesha@spc.int','moritzw@spc.int'], 'CREWS:Error', 'Bula! <br/><br/>There is some error with operational CREWS TV SPC machine.<br/>Please check!!!')
