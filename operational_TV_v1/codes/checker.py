@@ -5,7 +5,8 @@ from maileroffice import send_email_to_developer
 import glob
 import time
 
-path_to_check = ['../Hall_Reports/','../x_reports/']
+#path_to_check = ['../Hall_Reports/','../x_reports/']
+path_to_check = ['../Hall_Reports/']
 hours_to_check = 48
 
 def get_information(directory):
@@ -18,7 +19,7 @@ def get_information(directory):
 for x in path_to_check:
     dir_list = get_information(x)
 
-    filename= dir_list[0][0]
+    filename= dir_list[-1][0]
 
     year = filename[:4]
     month = filename[4:6]
@@ -29,6 +30,7 @@ for x in path_to_check:
     datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
     diff = datetime.now()-datetime_object
     hour_diff = diff.total_seconds()/3600
-    if abs(hour_diff) > hours_to_check:
-        print('send Email to developers!')
-        send_email_to_developer(['divesha@spc.int','moritzw@spc.int'], 'CREWS:Error', 'Bula! <br/><br/>There is some error with operational CREWS TV SPC machine.<br/>Please check!!!')
+    print(hour_diff)
+   # if abs(hour_diff) > hours_to_check:
+   #     print('send Email to developers!')
+   #     send_email_to_developer(['divesha@spc.int','moritzw@spc.int'], 'CREWS:Error', 'Bula! <br/><br/>There is some error with operational CREWS TV SPC machine.<br/>Please check!!!')
