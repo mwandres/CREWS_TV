@@ -6,7 +6,7 @@
             "mail_subject": "Tailored Wave Forecast TV",
             "location_of_small_map_png":"../extras/locations/",
             "mail_body": "Talofa! <br/><br/> Kindly attaching <span style='background-color:#51b73b; color:#FFF; font-weight:bold;'> &nbsp; &nbsp;High-Resolution &nbsp; &nbsp;</span> wave forecast for locations around Tuvalu. <br/><br/> <i>*** This is an automatically generated email, please do not reply ...</i><br/>Tuvalu Met Service",
-            "receipients":["divesha@spc.int","moritzw@spc.int","mativano94@gmail.com","tauala.k@gmail.com","tuvmet@gmail.com","antonioh@spc.int","herveda@spc.int","ZulfikarB@spc.int"]
+            "receipients":["mativano94@gmail.com","tauala.k@gmail.com","tuvmet@gmail.com"]
         }
         
     }
