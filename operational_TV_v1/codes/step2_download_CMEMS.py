@@ -42,8 +42,6 @@ def download_CNEMS(now):
                               --out-dir %(folder)s --out-name sla_%(island)s.nc\
                               --user mwandres --pwd nZp9d@zwPVi73hn' %{"lon_min":(sla_lon-0.001),"lon_max":(sla_lon+0.001),"lat_min":(sla_lat-0.001),"lat_max":(sla_lat+0.001),"ini":now.strftime('%Y-%m-%d %H:%M:%S') ,"end":then.strftime('%Y-%m-%d %H:%M:%S'),"folder":folder_tmp,"island":atoll})
                               
-         
-                              
         nc_fname = folder_tmp  + ('sla_%s.nc' % atoll)
         ncc = nc.Dataset(nc_fname)    
         time_var = ncc.variables['time']  
